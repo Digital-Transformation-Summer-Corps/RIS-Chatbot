@@ -550,6 +550,36 @@ Provide a clear and direct response to the user's query.
         return list(sources.values())
     
     # Query Methods
+    def query_and_return_source_nodes(self, question: str, top_k: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Query the RAG system and return source nodes"""
+        if not self.query_engine:
+            raise ValueError("Index not built. Call build_index() first.")
+        
+        top_k = top_k or self.config.similarity_top_k
+        
+        # Check cache
+        if self.query_cache:
+            cached_result = self.query_cache.get(question, top_k)
+            if cached_result:
+                if self.monitor:
+                    self.monitor.log_cache_hit()
+                self.logger.debug(f"Cache hit for query: {question[:50]}...")
+                return cached_result
+            else:
+                if self.monitor:
+                    self.monitor.log_cache_miss()
+        
+        # Execute query
+        start_time = time.time()
+        
+        response = self.query_engine.query(question)
+        answer = str(response)
+        response_with_source_nodes = {
+            "answer": answer,
+            "source_nodes": response.source_nodes
+        }
+        return response_with_source_nodes
+    
     def query(self, question: str, top_k: Optional[int] = None) -> str:
         """Query the RAG system with caching support"""
         if not self.query_engine:
