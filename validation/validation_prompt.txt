@@ -10,7 +10,7 @@ You are an expert evaluator tasked with scoring a chatbot's response to a questi
 
 **EVALUATION CRITERIA:**
 - The response should be factually accurate based on the context
-- The response should directly address the question asked
+- The response should directly and clearly answer the question, unless the question is too vague or its relevance to the context is unclear
 - The response should not contradict information in the context and references
 - The sources should be relevant to the question
 - The response should not include information not supported by the context and references

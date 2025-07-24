@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 import re
 
-load_dotenv()
+load_dotenv("../.env")
 
 VALIDATION_QUESTIONS_FILE = os.getenv('VALIDATION_QUESTIONS_FILE')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')

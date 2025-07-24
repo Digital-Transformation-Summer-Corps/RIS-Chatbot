@@ -38,14 +38,20 @@ def read_text_file(file_path: str) -> str:
         return ""
 
 def generate_questions(document_content: str, document_name: str) -> List[str]:
-    """Generate 3 questions about the document using OpenAI API."""
-    
-    prompt = f"""Create 3 frequently asked questions (FAQs) based on the following document. Write the kinds of questions that users commonly ask after reading this document.
+    prompt = f"""Create 3 frequently asked questions (FAQs) based on the following document. Each question should be:
+- Specific and self-contained (understandable without seeing the original document)
+- Include key details from the document rather than vague references like "these steps" or "this process"
+- Answerable by someone who has access to the document content
 
 Document: {document_name}
-
 Content:
 {document_content}
+
+Guidelines:
+- Replace vague references with specific terms (e.g., instead of "How do I do this on Windows?" write "How do I configure SSH keys on Windows?")
+- Include the main topic/subject in each question
+- Avoid pronouns like "this," "these," "it" without clear antecedents
+- Focus on the most important concepts, procedures, or troubleshooting issues covered
 
 Please provide exactly 3 questions, one per line, without numbering or bullet points:"""
 
