@@ -122,7 +122,9 @@ def export_page_with_metadata(page, path_prefix=""):
             'webpage_url': webpage_url,
             'title': title,
             'page_id': page_id,
-            'space_key': space_key
+            'space_key': space_key,
+            'file_path': markdown_path,
+            'last_scraped': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         
         # Save metadata to JSON file

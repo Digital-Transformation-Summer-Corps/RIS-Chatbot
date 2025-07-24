@@ -73,8 +73,13 @@ for root_dir, _, files in os.walk(DATA_DIR):
                 
                 # Query the LLM (if you have documents loaded)
                 try:
-                    chatbot_response = chatbot.query(question)
-                    print(f"ChatbotResponse: {chatbot_response}")
+                    chatbot_response = chatbot.query_with_details(question)
+                    print(f"ChatbotResponse: {chatbot_response['formatted_answer']}")
+                    sources_paths = []
+                    for source_info in chatbot_response['sources']:
+                        sources_paths.append(source_info['metadata']['file_path'])
+                    print(f"SourcesPaths: {sources_paths}")
+
                 except Exception as e:
                     # Add result showing the error
                     results.append({
@@ -86,28 +91,31 @@ for root_dir, _, files in os.walk(DATA_DIR):
                         'file_path': file_path
                     })
                     continue
+
+                # Grab reference contents from the sources_paths
+                references = []
+                for source_path in sources_paths:
+                    with open(source_path, 'r', encoding='utf-8') as f:
+                        reference_content = f.read()
+                    references.append(reference_content)
+                references = "\n\n".join(references)
                 
                 # Check if the response is correct using Gemini
-                prompt = VALIDATION_PROMPT_TEMPLATE.format(question=question, response=chatbot_response, context=file_content)
+                prompt = VALIDATION_PROMPT_TEMPLATE.format(question=question, response=chatbot_response, context=file_content, references=references)
                 gemini_response = client.models.generate_content(
-                    model="gemini-2.0-flash",
+                    model="gemini-2.5-pro",
                     contents=prompt
                 )
                 
-                gemini_text = gemini_response.text
+                gemini_text = str(gemini_response.candidates[0].content.parts[0].text)
                 print(f"GeminiResponse: {gemini_text}")
                 
                 # Parse the numeric score from Gemini's response
                 try:
                     # Extract the score (should be 1-5)
-                    score_text = gemini_text.strip()
-                    # Try to extract number from the response
-                    score_match = re.search(r'\b([1-5])\b', score_text)
-                    if score_match:
-                        score = int(score_match.group(1))
-                    else:
-                        print(f"Warning: Could not parse score from '{score_text}', defaulting to 1")
-                        score = 1
+                    score_text = gemini_text['score']
+                    score = int(score_text)
+                    explanation = gemini_text['explanation']
                 except (ValueError, AttributeError):
                     print(f"Warning: Could not parse score from '{gemini_text}', defaulting to 1")
                     score = 1
@@ -118,9 +126,9 @@ for root_dir, _, files in os.walk(DATA_DIR):
                 # Add result to list
                 results.append({
                     'question': question,
-                    'chatbot_response': chatbot_response,
-                    'gemini_response': gemini_text,
+                    'chatbot_response': chatbot_response['formatted_answer'],
                     'score': score,
+                    'explanation': explanation,
                     'file': file,
                     'file_path': file_path
                 })

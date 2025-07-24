@@ -6,11 +6,14 @@ You are an expert evaluator tasked with scoring a chatbot's response to a questi
 
 **CHATBOT'S RESPONSE:** {response}
 
+**CHATBOT'S REFERENCES:** {references}
+
 **EVALUATION CRITERIA:**
 - The response should be factually accurate based on the context
 - The response should directly address the question asked
-- The response should not contradict information in the context
-- The response should not include information not supported by the context
+- The response should not contradict information in the context and references
+- The sources should be relevant to the question
+- The response should not include information not supported by the context and references
 - Minor formatting differences or paraphrasing are acceptable if the core information is correct
 
 **SCORING SCALE:**
@@ -21,6 +24,14 @@ You are an expert evaluator tasked with scoring a chatbot's response to a questi
 - **1**: Very Poor - Largely inaccurate, misleading, or fails to address the question
 
 **INSTRUCTIONS:**
-Evaluate the chatbot's response and provide a score from 1-5 based on the criteria above. Respond with ONLY the number (1, 2, 3, 4, or 5).
+Carefully evaluate the chatbot's response using the criteria above. Assign a score from 1 to 5, and provide a concise explanation for your score. 
+
+**Your response must be a valid JSON object in the following format:**
+{
+  "score": <integer from 1 to 5>,
+  "explanation": "<brief explanation of your reasoning>"
+}
+
+Do not include any text or commentary outside of the JSON object.
 
 **RESPONSE:**
