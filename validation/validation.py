@@ -1,8 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from google import genai
-from ..rag_chatbot import EnhancedRAGChatbot, RAGConfig
+from rag_chatbot import EnhancedRAGChatbot, RAGConfig
 import pandas as pd
 from dotenv import load_dotenv
-import os
 from datetime import datetime
 import re
 
