@@ -1,5 +1,5 @@
 from google import genai
-from rag_chatbot import EnhancedRAGChatbot, RAGConfig
+from ..rag_chatbot import EnhancedRAGChatbot, RAGConfig
 import pandas as pd
 from dotenv import load_dotenv
 import os

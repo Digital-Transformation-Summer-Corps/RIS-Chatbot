@@ -7,7 +7,7 @@ from typing import List, Tuple
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv("../.env")
 
 # Configuration - these values are loaded from environment variables
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
