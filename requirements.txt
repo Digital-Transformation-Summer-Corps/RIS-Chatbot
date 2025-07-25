@@ -16,6 +16,6 @@ openai
 # Other dependencies
 python-dotenv
 streamlit>=1.28.0
-confluence-markdown-exporter
+confluence-markdown-exporter==2.1.0
 
 vllm
