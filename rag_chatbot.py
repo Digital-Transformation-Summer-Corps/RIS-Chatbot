@@ -37,7 +37,7 @@ class RAGConfig:
     embed_cache_enabled: bool = True
     
     # LLM configuration
-    llm_model: str = "mistral-small-2506"
+    llm_model: str = "mistralai/Mistral-Small-3.2-24B-Instruct-2506"
     llm_base_url: str = "https://localhost:8000/v1"
     llm_context_window: int = 65536
     system_prompt: str = "You are a helpful AI assistant. Answer questions based on the provided context. Be concise and accurate."
