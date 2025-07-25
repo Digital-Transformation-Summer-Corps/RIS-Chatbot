@@ -657,6 +657,7 @@ Provide a clear and direct response to the user's query.
         # Now yield the sources after the main response
         source_nodes = response.source_nodes if hasattr(response, 'source_nodes') else []
         if source_nodes:
+            print(f"has source nodes")
             sources = set()
             for node in source_nodes:
                 if hasattr(node, 'metadata') and node.metadata:
@@ -688,38 +689,6 @@ Provide a clear and direct response to the user's query.
             mock_response = MockResponse(full_response, response.source_nodes)
             formatted_response = self._format_response_with_references(mock_response)
             self.query_cache.set(question, top_k, formatted_response)
-
-    def query_with_sources(self, question: str, top_k: Optional[int] = None) -> Dict[str, Any]:
-        """Query with source paths"""
-        if not self.query_engine:
-            raise ValueError("Index not built. Call build_index() first.")
-        
-        top_k = top_k or self.config.similarity_top_k
-        
-        start_time = time.time()
-
-        # Update query engine if needed
-        if top_k != self.config.similarity_top_k:
-            self.query_engine = self._create_query_engine(similarity_top_k=top_k)
-        
-        response = self.query_engine.query(question)
-
-        answer = str(response)
-        
-        source_nodes = response.source_nodes if hasattr(response, 'source_nodes') else []
-        
-        if not source_nodes:
-            return answer
-        
-        sources = []
-        for node in source_nodes:
-            if hasattr(node, 'metadata') and node.metadata:
-                source = node.metadata.get('source', 'Unknown')
-                if '/' in source or '\\' in source:
-                    source = source.split('/')[-1].split('\\')[-1]
-                sources.append(source)
-
-        return {'answer': answer, 'sources': sources}
     
     def query_with_details(self, question: str, top_k: Optional[int] = None) -> Dict[str, Any]:
         """Query with detailed source information"""
