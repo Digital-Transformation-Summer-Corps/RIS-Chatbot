@@ -194,13 +194,13 @@ class EnhancedRAGChatbot:
         llm_api_key = self._get_api_key(self.config.llm_base_url)
         
         # Configure embedding model
-        self.embed_model = HuggingFaceEmbedding(model_name="Qwen/Qwen3-Embedding-0.6B")
-        # self.embed_model = OpenAILikeEmbedding(
-        #     model_name=self.config.embed_model,
-        #     api_base=self.config.embed_base_url,
-        #     api_key=embed_api_key,
-        #     embed_batch_size=self.config.embed_batch_size
-        # )
+        # self.embed_model = HuggingFaceEmbedding(model_name=self.config.embed_model)
+        self.embed_model = OpenAILikeEmbedding(
+            model_name=self.config.embed_model,
+            api_base=self.config.embed_base_url,
+            api_key=embed_api_key,
+            embed_batch_size=self.config.embed_batch_size
+        )
         # self.embed_model = MistralAIEmbedding(
         #     model_name=self.config.embed_model,
         #     api_key=embed_api_key,
