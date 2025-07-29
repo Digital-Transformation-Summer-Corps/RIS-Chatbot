@@ -42,6 +42,7 @@ if 'chatbot' not in st.session_state:
         anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
         together_api_key=os.getenv("TOGETHER_API_KEY"),
         hf_api_key=os.getenv("HF_API_KEY"),
+        deepinfra_api_key=os.getenv("DEEPINFRA_API_KEY"),
         collection_name=os.getenv("COLLECTION_NAME", "rag_collection"),
         persist_dir=os.getenv("PERSIST_DIR", "./chroma_db"),
         chunk_size=int(os.getenv("CHUNK_SIZE", "512")),

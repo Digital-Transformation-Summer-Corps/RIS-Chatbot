@@ -47,6 +47,7 @@ class RAGConfig:
     anthropic_api_key: Optional[str] = None
     together_api_key: Optional[str] = None
     hf_api_key: Optional[str] = None
+    deepinfra_api_key: Optional[str] = None
     
     # Chunking configuration
     chunk_size: int = 4096
@@ -256,6 +257,8 @@ class EnhancedRAGChatbot:
             return self.config.together_api_key or "dummy"
         elif "huggingface.co" in base_url:
             return self.config.hf_api_key or "dummy"
+        elif "deepinfra.com" in base_url:
+            return self.config.deepinfra_api_key or "dummy"
         else:
             return "dummy"  # For local servers
     
@@ -657,18 +660,32 @@ Provide a clear and direct response to the user's query.
         # Now yield the sources after the main response
         source_nodes = response.source_nodes if hasattr(response, 'source_nodes') else []
         if source_nodes:
-            print(f"has source nodes")
+        #     first_node = source_nodes[0]
+        #     print("Attributes and fields of the first source_node:")
+        #     if hasattr(first_node, '__dict__'):
+        #         for key, value in first_node.__dict__.items():
+        #             print(f"  {key}: {value}")
+        #     else:
+        #         # Fallback: dir() and getattr()
+        #         for attr in dir(first_node):
+        #             if not attr.startswith("__"):
+        #                 try:
+        #                     print(f"  {attr}: {getattr(first_node, attr)}")
+        #                 except Exception as e:
+        #                     print(f"  {attr}: <error: {e}>")
             sources = set()
             for node in source_nodes:
                 if hasattr(node, 'metadata') and node.metadata:
                     source = node.metadata.get('source', 'Unknown')
                     if '/' in source or '\\' in source:
                         source = source.split('/')[-1].split('\\')[-1]
+                    source = "[" +source.replace("+", " ") + "]" + "(" + node.metadata.get('source', 'Unknown') + ")"
                     sources.add(source)
             
             if sources:
                 references = ", ".join(sorted(sources))
                 sources_text = f"\n\n**Sources:** {references}"
+                print(f"sources_text is {sources_text}")
                 yield sources_text
         
         # Log performance and cache result
