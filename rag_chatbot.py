@@ -660,19 +660,6 @@ Provide a clear and direct response to the user's query.
         # Now yield the sources after the main response
         source_nodes = response.source_nodes if hasattr(response, 'source_nodes') else []
         if source_nodes:
-        #     first_node = source_nodes[0]
-        #     print("Attributes and fields of the first source_node:")
-        #     if hasattr(first_node, '__dict__'):
-        #         for key, value in first_node.__dict__.items():
-        #             print(f"  {key}: {value}")
-        #     else:
-        #         # Fallback: dir() and getattr()
-        #         for attr in dir(first_node):
-        #             if not attr.startswith("__"):
-        #                 try:
-        #                     print(f"  {attr}: {getattr(first_node, attr)}")
-        #                 except Exception as e:
-        #                     print(f"  {attr}: <error: {e}>")
             sources = set()
             for node in source_nodes:
                 if hasattr(node, 'metadata') and node.metadata:
