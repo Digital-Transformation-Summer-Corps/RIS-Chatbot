@@ -659,24 +659,6 @@ Provide a clear and direct response to the user's query.
                 print(f"sources_text is {sources_text}")
                 yield sources_text
         
-        # Now yield the sources after the main response
-        source_nodes = response.source_nodes if hasattr(response, 'source_nodes') else []
-        if source_nodes:
-            print(f"has source nodes")
-            sources = set()
-            for node in source_nodes:
-                if hasattr(node, 'metadata') and node.metadata:
-                    source = node.metadata.get('source', 'Unknown')
-                    if '/' in source or '\\' in source:
-                        source = source.split('/')[-1].split('\\')[-1]
-                    sources.add(source)
-
-            if sources:
-                references = ", ".join(sorted(sources))
-                sources_text = f"\n\n**Sources:** {references}"
-                print(f"sources_text is {sources_text}")
-                yield sources_text
-
         # Log performance and cache result
         duration = time.time() - start_time
         if self.monitor:
