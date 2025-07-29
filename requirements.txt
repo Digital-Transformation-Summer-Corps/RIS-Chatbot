@@ -10,19 +10,18 @@
 llama-index
 llama-index-embeddings-openai-like
 llama-index-llms-openai-like
-llama-index-embeddings-deepinfra
 llama-index-vector-stores-chroma
-#llama-index-embeddings-huggingface
+llama-index-embeddings-huggingface
 
 # vector store
 chromadb
 
 # LLM API
-#huggingface_hub[cli]
-#google-genai
-#openai
+huggingface_hub[cli]
+google-genai
+openai
 
 # Other dependencies
 python-dotenv
 streamlit>=1.28.0
-confluence-markdown-exporter==2.1.0
+confluence-markdown-exporter
