@@ -3,14 +3,14 @@
 RIS-Bot is a Retrieval-Augmented-Generation-based (RAG-based) pipeline for assisting researchers with WashU's High Performance Computing platform for research, Research Infrastructure Services (RIS). The pipeline consists of the following components:  
 1. **Data Collector:**  
 RIS-bot gains its knowledge from [WashU RIS Documentation](https://docs.ris.wustl.edu) hosted on Confluence. `confluence.py` can be used to scrape the entire documentation space at once or perform a partial scrape of documents updated within a given time frame. The time frame can be set within the program. One of the future goals of this project is to remove this parameter and automatically scrape any documents that have a later modification time on Confluence than locally.  
-3. **Vector Database:**  
+2. **Vector Database:**  
 The scraped documentation is embedded by an embedding model of the user's choice (specified in .env) and stored in a vector database for efficient inference-time retrieval. The vector database can be deleted and re-embedded to update its contents. It is a future goal of this project to allow for re-embedding of only files that were recently updated by `confluence.py`. All functionality related to the vector database is run through `manage_rag.py`.  
 At inference-time, the query is matched against the vector database using a cosine similarity test to produce the most semantically similar documents. These documents are then provided to the chatbot to provide context for answering the user questions.
-4. **LLM Server:**  
-The inference LLM is hosted on one of the compute-node / server's ports. The user may select any open-source model through the `.env` file or provide an API key for paywalled models (not extensively tested).  
-5. **Web Server:**  
+3. **LLM Server:**
+The "LLM Server" is an abstraction that provides inference endpoints for an LLM and an embedding model. If you choose to use APIs, the endpoints would be the respective endpoints of your providers. If you choose to self-host, the model endpoints would be ports on your server/compute node. Note that these do not need to be the same as the web server.
+4. **Web Server:**  
 On a separate port, the web server provides a Graphical Web UI that the user can connect to for querying the chatbot. The server instantiates an `EnhancedRAGChatbot()` object which queries the vector database, augments the user's questions with the system prompt and retrieved context, and contacts the LLM Server to generate answers.
-6. **Validator**
+5. **Validator:**  
 To establish a comprehensive baseline for the chatbot's performance, we use an LLM-as-a-judge benchamark. `generate_questions_gemini.py` / `generate_questions_o3.py` queries a reasoning model to come up with a set of test questions and `validation.py` queries a model to judge the chatbot's responses to these questions.
 
 ## Prerequisites
@@ -23,7 +23,7 @@ If you want to use a self-hosted LLM model or self-hosted embedding model for em
 - **Python**  
 For both approaches, you will need `python>=3.10,<=3.12`. Though currently untested, a base python image should be able to satisfy this requirement. If it does not, use `fizban007/ris_chatbot`.
 
-- (Only for self-hosting) **CUDA 12.4**
+- (Only for self-hosting) **CUDA 12.4**  
 If you want to self-host, you need to have `CUDA 12.4` installed on your system. This is the only version that the chatbot was tested on. Once that is done, you can run RIS-bot in the `fizban007/ris_chatbot` Docker image, or build your own compatible image from `Dockerfile.chatbot`. Otherwise, you will need to download CUDA 12.4 first.
 *For RIS users* Higher versions are not supported on RIS as of `07/30/2025`. A version is available at `/storage2/fs1/dt-summer-corp/Active/common/projects/ai-on-washu-infrastructure/chatbot/libs`.
 
