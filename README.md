@@ -16,26 +16,29 @@ To establish a comprehensive baseline for the chatbot's performance, we use an L
 ## Prerequisites
 
 ### System Requirements:
+The system requirements depend on whether you want to self-host the LLM and Embedding models or pay a negligible amount of money and use external APIs. You will need to set up `CUDA` for the former.
+
+- **Python**
+For both approaches, you will need `python>=3.10,<=3.12`. Though currently untested, a base python image should be able to satisfy this requirement. If it does not, use `fizban007/ris_chatbot`.
 
 - **CUDA 12.4**
-
-- **Docker image**
-
-If you have CUDA 12.4 installed on your system, you can run RIS-bot in the `fizban007/ris_chatbot` Docker image, or build your own compatible image from `Dockerfile.chatbot`. Otherwise, you will need to download CUDA 12.4 first. CUDA 12.4 is available to members of Digital Transformations Summer Corps at `/storage2/fs1/dt-summer-corp/Active/common/projects/ai-on-washu-infrastructure/chatbot/libs`.
+If you want to self-host, you need to have `CUDA 12.4` installed on your system. This is the only version that the chatbot was tested on.
+*For RIS users* Higher versions are not supported on RIS as of `07/30/2025`. A version is available at `/storage2/fs1/dt-summer-corp/Active/common/projects/ai-on-washu-infrastructure/chatbot/libs`.
+If you have CUDA 12.4 installed on your system, you can run RIS-bot in the `fizban007/ris_chatbot` Docker image, or build your own compatible image from `Dockerfile.chatbot`. Otherwise, you will need to download CUDA 12.4 first.
 
 ### Program Requirements:
 
-- **LlamaIndex components** (indexing documentation to facilitate RAG)
+- **LlamaIndex components** (embedding and indexing documentation and queries)
 
 - **ChromaDB** (vector database for storing vectorized documentation)
 
-- **huggingface hub** (downloading models for embedding and inference)
+- (Only for self-hosting) **huggingface hub** (downloading models for embedding and inference)
 
-- **OpenAI and Gemini** (API support for validation Q&A generation and LLM-based judging)
+- (Only for self-hosting) **Llama.cpp / VLLM** (LLM server)
 
-- **Llama.cpp / VLLM** (LLM server)
+- (Only for self-hosting) **PyTorch** (VLLM dependency)
 
-- **PyTorch** (VLLM dependency)
+- (Only for validation) **OpenAI and Gemini** (API support for validation Q&A generation and LLM-based judging)
 
 It is recommended to create a separate virtual environment using tools such as `uv` or `conda`. Follow along for more detailed steps using `venv`.
 
