@@ -82,18 +82,19 @@ It is recommended to create a separate virtual environment using tools such as `
    And paste the following contents:
    ```bash
    #!/bin/bash
-   #BSUB -q artsci-interactive
-   #BSUB -G compute-artsci
+   # replace <YOUR COMPUTE QUEUE> with an INTERACTIVE compute queue, e.g. artsci-interactive, general-interactive
+   #BSUB -q <YOUR COMPUTE QUEUE>
+   # replace <YOUR COMPUTE GROUP> with your compute group, e.g. compute-artsci, compute-dt-summer-corp
+   #BSUB -G <YOUR COMPUTE GROUP>
    #BSUB -n 8
    #BSUB -R 'select[port8003=1]'
-   #BSUB -R 'gpuhost rusage[mem=120GB]'
-   #BSUB -gpu 'num=1'
+   #BSUB -R 'rusage[mem=120GB]'
    #BSUB -a "docker(fizban007/ris_chatbot)"
    
    # Option 1: cloning the repo yourself
    # cd <YOUR_WORKING_DIR>
    # git clone https://github.com/Digital-Transformation-Summer-Corps/RIS-Chatbot.git
-   # cd RIS-Chatbot
+   # cd <YOUR_WORKING_DIR>/RIS-Chatbot
    # Option 2: for dt-summer-corp and admin users, a working copy exists on storage2
    cd /storage2/fs1/dt-summer-corp/Active/common/projects/ai-on-washu-infrastructure/chatbot/ragbot-dev
 
@@ -109,6 +110,15 @@ It is recommended to create a separate virtual environment using tools such as `
        source venv/bin/activate
    fi
    ```
+   *Note*: If you wish to **self-host the LLM server**, you will need to replace
+   ```
+   #BSUB -R 'rusage[mem=120GB]'
+   ```
+   with
+   ```
+   #BSUB -R 'gpuhost rusage[mem=120GB]'
+   #BSUB -gpu 'num=1'
+   ``` 
    Then, create a bash script for exporting environment variables and submitting the job.
    ```bash
    cd ~
