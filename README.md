@@ -17,11 +17,13 @@ To establish a comprehensive baseline for the chatbot's performance, we use an L
 
 ### System Requirements:
 The system requirements depend on whether you want to self-host the LLM and Embedding models or pay a negligible amount of money and use external APIs. You will need to set up `CUDA` for the former.
+- (Optional) **GPU**
+If you want to use a self-hosted LLM model or self-hosted embedding model for embedding documentation, you will need a GPU. Note that embedding documentation is different from embedding queries. CPUs work fine for the latter.
 
 - **Python**
 For both approaches, you will need `python>=3.10,<=3.12`. Though currently untested, a base python image should be able to satisfy this requirement. If it does not, use `fizban007/ris_chatbot`.
 
-- **CUDA 12.4**
+- (Only for self-hosting) **CUDA 12.4**
 If you want to self-host, you need to have `CUDA 12.4` installed on your system. This is the only version that the chatbot was tested on.
 *For RIS users* Higher versions are not supported on RIS as of `07/30/2025`. A version is available at `/storage2/fs1/dt-summer-corp/Active/common/projects/ai-on-washu-infrastructure/chatbot/libs`.
 If you have CUDA 12.4 installed on your system, you can run RIS-bot in the `fizban007/ris_chatbot` Docker image, or build your own compatible image from `Dockerfile.chatbot`. Otherwise, you will need to download CUDA 12.4 first.
@@ -127,6 +129,7 @@ It is recommended to create a separate virtual environment using tools such as `
    ```
 
 ## Setting up the RAG database
+We embed the 
 Export all pages from Confluence. The first time you run this, it may ask for some authentication details. Choose the first option and input the root URL of the RIS Confluence instance: `https://washu.atlassian.net/`. This will take a while to run (~5 minutes) and export all the pages to the `RIS User Documentation` directory:
 ```
 python confluence.py
