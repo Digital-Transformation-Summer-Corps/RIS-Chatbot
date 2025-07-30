@@ -56,7 +56,9 @@ It is recommended to create a separate virtual environment using tools such as `
 5. Set your own configurations as environment variables. A template is provided as `.env.example`. Note that you would need to add your own Gemini API key for validation (QA generation & LLM-as-a-judge).
    ```
    cp .env.example .env
+   chmod 600 .env
    ```
+   ** It is VERY IMPORTANT to limit permissions to your .env if you are using a shared storage space because it contains sensitive API key information.
    *cp does not cause any changes that Git tracks, so there will be no conflicts*
 
 
@@ -142,36 +144,29 @@ python manage_rag.py clear-collection
 ```
 
 ## Setting up the LLM server
-### vLLM
-### llama.cpp
-Clone the llama.cpp repository. We use it to run the LLM server that powers the chatbot:
+We use the common abstraction of a LLM server. This simply refers to a pair of inference providers which allow you to run embedding and chat completion. Both hosting LLMs and using an external API are supported.
+### External APIs
+The current code is set up to run embedding and chat completion through LLM APIs. The default choices are `Qwen-3-8b` for embedding and `Mistral-small` for chat completion. Simply change `.env` if you want different models but make sure to also provide the API endpoint address and API key. No additional setup is required. This option can run without GPUs.
+### Alternative: Self-hosting
+**llama.cpp**
+To host the models using llama.cpp, run the following commands from your working repository:
 ```
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-```
 
-Target a cuda-based build:
-```
+# Target a cuda-based build:
 cmake -B build -DGGML_CUDA=ON -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DCMAKE_BUILD_TYPE=Release
-```
 
-Build the server. If you only requested 1 CPU core then it may take a while:
-```
+# Build the server. If you only requested 1 CPU core then it may take a while:
 cmake --build build -j
-```
 
-Download the model. May need to authenticate when running the first time:
-```
+# Download the model. May need to authenticate when running the first time:
 huggingface-cli download unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF --include "Mistral-Small-3.2-24B-Instruct-2506-UD-Q8_K_XL.gguf" --local-dir models/
-```
 
-Run the server. Eventually we may need to explore switching to vllm since it's better optimized for many users:
-```
+# Run the server
 LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/ ./build/bin/llama-server --jinja --port 8000 --model models/Mistral-Small-3.2-24B-Instruct-2506-UD-Q8_K_XL.gguf -ngl 99 -fa -c 65536 --mlock --cache-reuse 256 --temp 0.15 --top-k -1 --top-p 1.00 &
-```
 
-Return to the main directory:
-```
+# Return to the main directory
 cd ..
 ```
 
