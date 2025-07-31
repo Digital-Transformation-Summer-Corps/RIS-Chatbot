@@ -2,15 +2,7 @@
 
 RIS-Bot is a chatbot tool for answering questions about the Research Infrastructure Services (RIS) HPC platform at Washignton University in St. Louis. RIS-Bot performs Retrieval Augmented Generation (RAG) on the documentation sourced from [WashU RIS Documentation](https://docs.ris.wustl.edu), with a self-contained pipeline for data retrieval, vector embedding and RAG generation.
 
-graph TD;
-    A[Start: RIS-Bot] --> B[Data Collector<br>Scrape RIS docs via confluence.py];
-    B --> C[Vector Database<br>Embed & store documents];
-    C --> D[LLM Server<br>Provides inference and embedding endpoints];
-    D --> E[Web Server<br>Graphical UI via EnhancedRAGChatbot()];
-    E --> F[User Query & Response];
-
-    C --> G[Validator<br>LLM-as-a-Judge Benchmark];
-    G --> C;
+<pre> ```mermaid graph TD; A[Start: RIS-Bot] --> B[Data Collector<br>Scrape RIS docs via confluence.py]; B --> C[Vector Database<br>Embed & store documents]; C --> D[LLM Server<br>Provides inference and embedding endpoints]; D --> E[Web Server<br>Graphical UI via EnhancedRAGChatbot()]; E --> F[User Query & Response]; C --> G[Validator<br>LLM-as-a-Judge Benchmark]; G --> C; ``` </pre>
     
 # Deployment
 
