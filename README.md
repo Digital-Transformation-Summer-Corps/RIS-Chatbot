@@ -13,6 +13,8 @@ On a separate port, the web server provides a Graphical Web UI that the user can
 5. **Validator:**  
 To establish a comprehensive baseline for the chatbot's performance, we use an LLM-as-a-judge benchamark. `generate_questions_gemini.py` / `generate_questions_o3.py` queries a reasoning model to come up with a set of test questions and `validation.py` queries a model to judge the chatbot's responses to these questions.
 
+<img width="2458" height="1574" alt="image" src="https://github.com/user-attachments/assets/d7eda808-6248-4b86-b305-5b83bbecaef6" />
+
 ## Prerequisites
 
 ### System Requirements:
@@ -215,6 +217,8 @@ Add the following to .env:
 - `GEMINI_API_KEY=<YOUR GEMINI API KEY>`
 - (if you want to use GPT models) `OPENAI_API_KEY=<YOUR OPENAI API KEY>` (Note that o3 requires identity verification)
 - (Path to RIS documentation) (a copy is included in the validation folder as of 07/12/2025)
+
+<img width="2440" height="600" alt="image" src="https://github.com/user-attachments/assets/4497f14c-3548-4824-9cd5-92bb4b67b50a" />
 
 ## Generate Questions
 ```
