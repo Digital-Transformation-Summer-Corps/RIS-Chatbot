@@ -656,7 +656,6 @@ Provide a clear and direct response to the user's query.
             if sources:
                 references = ", ".join(sorted(sources))
                 sources_text = f"\n\n**Sources:** {references}"
-                print(f"sources_text is {sources_text}")
                 yield sources_text
         
         # Log performance and cache result
