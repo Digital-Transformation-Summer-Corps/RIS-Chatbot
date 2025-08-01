@@ -241,14 +241,15 @@ python generate_questions_gemini.py
 # python generate_questions_o3.py
 ```
 This will create three questions for each page in RIS Documentation using the model you chose. We use the following prompt but feel free to play around with it:
->Create 3 frequently asked questions (FAQs) based on the following document. Write the kinds of questions that users commonly ask after reading this document\
-\
-Document: {document_name}
-\
-Content: {document_content}
-\
-Please provide exactly 3 questions, one per line, without numbering or bullet points:
+```
+Create 3 frequently asked questions (FAQs) based on the following document. Write the kinds of questions that users commonly ask after reading this document
 
+Document: {document_name}
+
+Content: {document_content}
+
+Please provide exactly 3 questions, one per line, without numbering or bullet points:
+```
 OpenAI o3 is also available using `generate_questions_o3.py`. Feel free to engineer the prompts to generate different-style questions.
 
 *TO-DO*: Variable number of questions based on document information content
