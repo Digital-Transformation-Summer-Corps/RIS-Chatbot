@@ -250,13 +250,14 @@ DATA_DIR=<PATH TO DATA> # This should already be filled in from the scraping pro
 The benchmark is judged by an LLM on the closeness of the chatbot's answer to the documentation provided. Currently, we support the use of OpenAI and Gemini models. `Gemini-2.5-Pro` and `OpenAI o3` seem the model promising.
 
 ## Generate Questions
+To generate the test questions, run the following
 ```bash
 cd validation
 python generate_questions_gemini.py
 # Or
 # python generate_questions_o3.py
 ```
-This will create three questions for each page in RIS Documentation using the model you chose. We use the following prompt but feel free to play around with it:
+We use the following prompt but feel free to engineer it further to generate different-style questions:
 ```bash
 Create 3 frequently asked questions (FAQs) based on the following document. Write the kinds of questions that users commonly ask after reading this document
 
@@ -266,11 +267,11 @@ Content: {document_content}
 
 Please provide exactly 3 questions, one per line, without numbering or bullet points:
 ```
-OpenAI o3 is also available using `generate_questions_o3.py`. Feel free to engineer the prompts to generate different-style questions.
-
+The generated questions are saved to `document_questions_gemini.csv` and `document_questions_o3.csv` with `Document Name` and `Document Path`. If you wish to review generated questions, add custom questions, or delete poorly-formed questions, simply edit the respective .csv file (but make sure to associate at least one documentation page with your question when adding new questions).
 *TO-DO*: Variable number of questions based on document information content
 
 ## Benchmark Chatbot
+We ask the reasoning model to assign a score of 1-5 for the chatbot's response to each of the above questions, printing out a rolling average during the process and presenting a final average score at the end. 
 Switch to main directory and run the LLM judging script.
 ```bash
 cd ..
@@ -278,5 +279,6 @@ python validation.py
 ```
 
 Grab a coffee, take a nap ~ It'll take a while. 💤
+All questions, chatbot responses, score given by reasoning model, and file associated with the question are saved in `val_<RUN DATE>_<RUN TIME>.csv`.
 
 *TO-DO*: Append sources referenced by chatbot for comprehensive judging 
