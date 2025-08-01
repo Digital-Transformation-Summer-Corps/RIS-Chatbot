@@ -154,8 +154,12 @@ Compute the embeddings and store them in the RAG database:
 ```
 python manage_rag.py load-docs --dir ./RIS\ User\ Documentation/RIS\ User\ Documentation
 ```
-*IMPORTANT*: Before embedding updated documentation, you must remove the original copies. Currently, it is easiest to clear the entire database and re-embed all documentation. This process is not time-intensive.
-This can be done with the `manage_rag.py` script, which has the following functionalities:
+
+***IMPORTANT***: For regular runs after the first, run clear-collection before load-docs to avoid duplicates.
+```
+python manage_rag.py clear-collection
+```
+The `manage_rag.py` script has the following functionalities:
 - Load all documentation in a directory: `load-docs --dir <DOCUMENT DIR>`
 - Load a single document: `load-docs --file <FILE PATH>`
 - `list-sources`
@@ -166,12 +170,8 @@ This can be done with the `manage_rag.py` script, which has the following functi
 - `restore --input ./backup.pkl`
 - `update-from-list --file updated_files.txt`
 - `get-chunks --source document.txt`
-*Optional TODO*: Test and fix the update-from-list functionality
 
-For regular runs after the first, run clear-collection before load-docs to avoid duplicates.
-```
-python manage_rag.py clear-collection
-```
+*Optional TODO*: Test and fix the `update-from-list` functionality, which utilizes the `updated_files.txt` file from the data scraper to run incremental updates to the database.
 
 ## Setting up the LLM server
 We use the common abstraction of a LLM server. This simply refers to a pair of inference providers which allow you to run embedding and chat completion. Both hosting LLMs and using an external API are supported.
