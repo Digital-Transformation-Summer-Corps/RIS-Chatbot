@@ -54,14 +54,14 @@ It is recommended to create a separate virtual environment using tools such as `
 3. Connect to a compute node with 1 GPU and run your Docker container.
 
 4. Switch to your working directory and clone this repository
-   ```
+   ```bash
    cd <YOUR_WORKING_DIR>
    git clone https://github.com/Digital-Transformation-Summer-Corps/RIS-Chatbot.git
    cd RIS-Chatbot
    ```
 
 5. Set your own configurations as environment variables. A template is provided as `.env.example`. Note that you would need to add your own Gemini API key for validation (QA generation & LLM-as-a-judge).
-   ```
+   ```bash
    cp .env.example .env
    chmod 600 .env
    ```
@@ -70,7 +70,7 @@ It is recommended to create a separate virtual environment using tools such as `
 
 
 6. Create and activate a virtual environment in the chatbot directory. Then, install the requirements.
-   ```
+   ```bash
    python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
@@ -113,11 +113,11 @@ It is recommended to create a separate virtual environment using tools such as `
    fi
    ```
    *Note*: If you wish to **self-host the LLM server**, you will need to replace
-   ```
+   ```bash
    #BSUB -R 'rusage[mem=120GB]'
    ```
    with
-   ```
+   ```bash
    #BSUB -R 'gpuhost rusage[mem=120GB]'
    #BSUB -gpu 'num=1'
    ``` 
@@ -143,7 +143,7 @@ It is recommended to create a separate virtual environment using tools such as `
 We scrape the official RIS documenation from Confluence using `confluence-markdown-exporter` embed it in a vector database using `chromadb`. This pipeline should be run regularly to ensure the chatbot's sources are up to date.  
 To scrape the docs, run `confluence.py`. The first time you run this, it may ask for some authentication details. Choose the first option and input the root URL of the RIS Confluence instance: `https://washu.atlassian.net/`. This will take a while to run (~5 minutes) and export all the pages to the `RIS User Documentation` directory:
 
-```
+```bash
 python confluence.py
 ```
 This exports all pages as a separate Markdown file while preserving the folder structure of the space. Metadata of each file (i.e. URL, scrape time, etc.) will be stored in a `.json` file at the same location as the `.md` file.  
@@ -151,12 +151,12 @@ During the first run, a file is created in the directory where the documentation
 *TODO*: Change the script to check the creation time of the latest version of each document and update those with a later creation time than when the local version was last scraped (can be found in <DOCUMENT NAME>.json).
 
 Compute the embeddings and store them in the RAG database:
-```
+```bash
 python manage_rag.py load-docs --dir ./RIS\ User\ Documentation/RIS\ User\ Documentation
 ```
 
 ***IMPORTANT***: For regular runs after the first, run clear-collection before load-docs to avoid duplicates.
-```
+```bash
 python manage_rag.py clear-collection
 ```
 The `manage_rag.py` script has the following functionalities:
@@ -183,7 +183,7 @@ You may choose to host the LLM yourself.
 
 **Host using llama.cpp**
 To host the models using llama.cpp, run the following commands from your working repository:
-```
+```bash
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 
@@ -205,7 +205,7 @@ cd ..
 
 **Host using vLLM**
 vLLM offers better multi-user support at the cost of slower initial start time. Set `LLM_MODEL=mistralai/Mistral-Small-3.2-24B-Instruct-2506` in `.env`.
-```
+```bash
 # Install vllm
 pip install vllm
 
@@ -213,18 +213,18 @@ pip install vllm
 HF_HOME=huggingface/ vllm serve mistralai/Mistral-Small-3.2-24B-Instruct-2506 --tokenizer_mode mistral --config_format mistral --load_format mistral --tool-call-parser mistral --enable-auto-tool-choice &
 ```
 *Note*: vLLM, by default, caches data and models in your `$HOME` directory. If you receive 'Disk Quote Exceeded' Error on RIS, try running
-```
+```bash
 rm -rf ~/.cache
 ```
 If that still doesn't work try setting your TORCH_CACHE and TORCH_COMPILE_CACHE directories to a cache directory under your working directory.
-```
+```bash
 export TORCH_CACHE=<CHATBOT REPO>/.cache/torch
 export TORCH_COMPILE_CACHE=<CHATBOT REPO>/.cache/torch_compile
 ```
 
 ## Web Server / UI
 Start the Streamlit application from your working directory (where streamlit_app_simple.py is located):
-```
+```bash
 STREAMLIT_SERVER_ADDRESS=0.0.0.0 streamlit run streamlit_app_simple.py &
 ```
 
@@ -242,7 +242,7 @@ For each document, we use a reasoning model to generate 3 questions about that e
 
 ## System Setup
 Before running the scripts, you would need to add your own Gemini API key, (optionally) OpenAI API key, and the path to scraped documentation to the main .env file.
-```
+```bash
 GEMINI_API_KEY=<YOUR GEMINI API KEY>
 OPENAI_API_KEY=<YOUR OPENAI API KEY>
 DATA_DIR=<PATH TO DATA> # This should already be filled in from the scraping process
@@ -250,14 +250,14 @@ DATA_DIR=<PATH TO DATA> # This should already be filled in from the scraping pro
 The benchmark is judged by an LLM on the closeness of the chatbot's answer to the documentation provided. Currently, we support the use of OpenAI and Gemini models. `Gemini-2.5-Pro` and `OpenAI o3` seem the model promising.
 
 ## Generate Questions
-```
+```bash
 cd validation
 python generate_questions_gemini.py
 # Or
 # python generate_questions_o3.py
 ```
 This will create three questions for each page in RIS Documentation using the model you chose. We use the following prompt but feel free to play around with it:
-```
+```bash
 Create 3 frequently asked questions (FAQs) based on the following document. Write the kinds of questions that users commonly ask after reading this document
 
 Document: {document_name}
@@ -272,7 +272,7 @@ OpenAI o3 is also available using `generate_questions_o3.py`. Feel free to engin
 
 ## Benchmark Chatbot
 Switch to main directory and run the LLM judging script.
-```
+```bash
 cd ..
 python validation.py
 ```
