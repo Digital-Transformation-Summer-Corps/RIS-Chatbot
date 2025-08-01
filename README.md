@@ -212,7 +212,15 @@ pip install vllm
 # Serve the same model as above. This one by default is using the unquantized model so it's slower on single user, but throughput should be better for multiple users. HF_HOME is needed to avoid downloading the model to the home directory:
 HF_HOME=huggingface/ vllm serve mistralai/Mistral-Small-3.2-24B-Instruct-2506 --tokenizer_mode mistral --config_format mistral --load_format mistral --tool-call-parser mistral --enable-auto-tool-choice &
 ```
-*Note*: If you receive 'Disk Quote Exceeded' Error, try exporting your TORCH_CACHE, TORCH_COMPILE_CACHE, and XDG_CACHE to a cache directory under your working directory.
+*Note*: vLLM, by default, caches data and models in your `$HOME` directory. If you receive 'Disk Quote Exceeded' Error on RIS, try running
+```
+rm -rf ~/.cache
+```
+If that still doesn't work try setting your TORCH_CACHE and TORCH_COMPILE_CACHE directories to a cache directory under your working directory.
+```
+export TORCH_CACHE=<CHATBOT REPO>/.cache/torch
+export TORCH_COMPILE_CACHE=<CHATBOT REPO>/.cache/torch_compile
+```
 
 ## Web Server / UI
 Start the Streamlit application from your working directory (where streamlit_app_simple.py is located):
