@@ -234,16 +234,19 @@ If you are running the web server from RIS, connect to `http://compute1-exec-xxx
 
 # Validation
 We build a custom LLM-as-a-judge benchmark to evaluate the performance of the chatbot pipeline. All of this functionality is grouped under the `validation` folder.
-First, we use a reasoning model to generate 3 questions about each documentation entry. The current best models for doing so are `gemini-2.5-pro`(Google Gemini) and `o3` (OpenAI), so we created `generate_questions_gemini.py` (with support for all Gemini models) and `generate_questions_o3.py` (with support for all OpenAI models).
-Before running the scripts, you would need to add your own Gemini API key and OpenAI API key to the main .env file
-The questions, depending 
-The benchmark is judged by an LLM on the closeness of the chatbot's answer to the documentation provided. Currently, we support the use of OpenAI and Gemini models. `Gemini-2.5-Pro` and `OpenAI o3` seem the model promising.
-Add the following to .env:
-- `GEMINI_API_KEY=<YOUR GEMINI API KEY>`
-- (if you want to use GPT models) `OPENAI_API_KEY=<YOUR OPENAI API KEY>` (Note that o3 requires identity verification)
-- (Path to RIS documentation) (a copy is included in the validation folder as of 07/12/2025)
-
+For each document, we use a reasoning model to generate 3 questions about that entry. Then, we generate a response to each question using our chatbot pipeline and ask the reasoning model to evaluate that response on factuality, relevance, and other qualities. The current best models for doing so are `gemini-2.5-pro`(Google Gemini) and `o3` (OpenAI), so we created:
+- `generate_questions_gemini.py` (for question generation with all Gemini models)
+- `generate_questions_o3.py` (for questions generation with all OpenAI models)
+*Note*: API access to o3 requires institutional verification.
 <img width="2440" height="600" alt="image" src="https://github.com/user-attachments/assets/4497f14c-3548-4824-9cd5-92bb4b67b50a" />
+## System Setup
+Before running the scripts, you would need to add your own Gemini API key, (optionally) OpenAI API key, and the path to scraped documentation to the main .env file.
+```
+GEMINI_API_KEY=<YOUR GEMINI API KEY>
+OPENAI_API_KEY=<YOUR OPENAI API KEY>
+DATA_DIR=<PATH TO DATA> # This should already be filled in from the scraping process
+```
+The benchmark is judged by an LLM on the closeness of the chatbot's answer to the documentation provided. Currently, we support the use of OpenAI and Gemini models. `Gemini-2.5-Pro` and `OpenAI o3` seem the model promising.
 
 ## Generate Questions
 ```
