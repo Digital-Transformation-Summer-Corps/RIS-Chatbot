@@ -239,6 +239,7 @@ For each document, we use a reasoning model to generate 3 questions about that e
 - `generate_questions_o3.py` (for questions generation with all OpenAI models)
 *Note*: API access to o3 requires institutional verification.
 <img width="2440" height="600" alt="image" src="https://github.com/user-attachments/assets/4497f14c-3548-4824-9cd5-92bb4b67b50a" />
+
 ## System Setup
 Before running the scripts, you would need to add your own Gemini API key, (optionally) OpenAI API key, and the path to scraped documentation to the main .env file.
 ```
