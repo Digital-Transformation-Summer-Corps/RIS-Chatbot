@@ -156,8 +156,7 @@ python manage_rag.py load-docs --dir ./RIS\ User\ Documentation/RIS\ User\ Docum
 ```
 *IMPORTANT*: Before embedding updated documentation, you must remove the original copies. Currently, it is easiest to clear the entire database and re-embed all documentation. This process is not time-intensive.
 This can be done with the `manage_rag.py` script, which has the following functionalities:
-<ul>
-   <li>Load all documentation in a directory: `load-docs --dir <DOCUMENT DIR>`</li>
+- Load all documentation in a directory: `load-docs --dir <DOCUMENT DIR>`
    <li>Load a single document: `load-docs --file <FILE PATH>`</li>
    <li>`list-sources`</li>
    <li>`delete-source --name <DOCUMENT TITLE>`</li>
