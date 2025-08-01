@@ -13,6 +13,8 @@ On a separate port, the web server provides a Graphical Web UI that the user can
 5. **Validator:**  
 To establish a comprehensive baseline for the chatbot's performance, we use an LLM-as-a-judge benchamark. `generate_questions_gemini.py` / `generate_questions_o3.py` queries a reasoning model to come up with a set of test questions and `validation.py` queries a model to judge the chatbot's responses to these questions.
 
+<img width="2458" height="1574" alt="image" src="https://github.com/user-attachments/assets/d7eda808-6248-4b86-b305-5b83bbecaef6" />
+
 ## Prerequisites
 
 ### System Requirements:
@@ -138,23 +140,22 @@ It is recommended to create a separate virtual environment using tools such as `
    ```
 
 ## Setting up the RAG database
-We embed the 
-Export all pages from Confluence. The first time you run this, it may ask for some authentication details. Choose the first option and input the root URL of the RIS Confluence instance: `https://washu.atlassian.net/`. This will take a while to run (~5 minutes) and export all the pages to the `RIS User Documentation` directory:
+We scrape the official RIS documenation from Confluence using `confluence-markdown-exporter` embed it in a vector database using `chromadb`. This pipeline should be run regularly to ensure the chatbot's sources are up to date.  
+To scrape the docs, run `confluence.py`. The first time you run this, it may ask for some authentication details. Choose the first option and input the root URL of the RIS Confluence instance: `https://washu.atlassian.net/`. This will take a while to run (~5 minutes) and export all the pages to the `RIS User Documentation` directory:
+
 ```
 python confluence.py
 ```
-
-Clean up the markdown files to change the code block syntax from ```java to ```:
-```
-python fix_markdown.py
-```
+This exports all pages as a separate Markdown file while preserving the folder structure of the space. Metadata of each file (i.e. URL, scrape time, etc.) will be stored in a `.json` file at the same location as the `.md` file.  
+During the first run, a file is created in the directory where the documentation is saved ("RIS User Documentation" by default) called `updated_files.txt`. Subsequent runs will detect the existence of this file and only run incremental updates (as of `07/30/2025`, scrape docs updated in the past 20 days) instead of a full scrape, significantly reducing the time it takes to run the script.  
+*TODO*: Change the script to check the creation time of the latest version of each document and update those with a later creation time than when the local version was last scraped (can be found in <DOCUMENT NAME>.json).
 
 Compute the embeddings and store them in the RAG database:
 ```
 python manage_rag.py load-docs --dir ./RIS\ User\ Documentation/RIS\ User\ Documentation
 ```
 
-If you need to clear the database and re-index it:
+For regular runs after the first, run clear-collection before load-docs to avoid duplicates.
 ```
 python manage_rag.py clear-collection
 ```
@@ -216,6 +217,8 @@ Add the following to .env:
 - `GEMINI_API_KEY=<YOUR GEMINI API KEY>`
 - (if you want to use GPT models) `OPENAI_API_KEY=<YOUR OPENAI API KEY>` (Note that o3 requires identity verification)
 - (Path to RIS documentation) (a copy is included in the validation folder as of 07/12/2025)
+
+<img width="2440" height="600" alt="image" src="https://github.com/user-attachments/assets/4497f14c-3548-4824-9cd5-92bb4b67b50a" />
 
 ## Generate Questions
 ```
