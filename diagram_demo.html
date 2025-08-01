@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot Architecture Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #mermaid-diagram {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .description {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RAG Chatbot Architecture Diagram</h1>
+        
+        <div class="controls">
+            <button onclick="renderDiagram()">Render Diagram</button>
+            <button onclick="clearDiagram()">Clear</button>
+        </div>
+        
+        <div id="mermaid-diagram">
+            <p>Click "Render Diagram" to display the architecture diagram.</p>
+        </div>
+        
+        <div class="description">
+            <h3>Architecture Overview:</h3>
+            <p>This diagram shows the architecture of a Retrieval-Augmented Generation (RAG) chatbot system that processes documentation from Confluence and provides intelligent responses to user queries.</p>
+            <ul>
+                <li><strong>Data Sources (Blue):</strong> Confluence documentation that serves as the knowledge base</li>
+                <li><strong>Processing (Purple):</strong> Data scraping and text processing components</li>
+                <li><strong>Storage (Green):</strong> Vector database for semantic search and retrieval</li>
+                <li><strong>Interface (Orange):</strong> Web server and user interaction components</li>
+                <li><strong>AI Models (Pink):</strong> Embedding models, Large Language Models, and reasoning models</li>
+                <li><strong>Validation (Teal):</strong> Quality assurance and testing framework</li>
+            </ul>
+            
+            <h3>Data Flow:</h3>
+            <ol>
+                <li>Documentation is scraped from Confluence</li>
+                <li>Text is processed and converted to vector embeddings</li>
+                <li>Embeddings are stored in a vector database</li>
+                <li>User queries are processed and matched against stored vectors</li>
+                <li>Relevant context is retrieved and sent to the LLM</li>
+                <li>The LLM generates responses based on the context</li>
+                <li>Validation systems ensure quality and accuracy</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script src="graphic.js"></script>
+    <script>
+        function clearDiagram() {
+            const container = document.getElementById('mermaid-diagram');
+            container.innerHTML = '<p>Diagram cleared. Click "Render Diagram" to display it again.</p>';
+        }
+    </script>
+</body>
+</html>
